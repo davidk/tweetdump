@@ -32,5 +32,12 @@ tweetdump unpacks [Anaconda's](https://github.com/ChimeraCoder/anaconda) Tweet s
       -version
         	Prints version information
 
+### Environmental Variables
+
+tweetdump supports the following environmental variables to set the consumer and secret keys. CLI invocations should override these:
+
+    TWDUMP_CONSUMER_KEY
+    TWDUMP_CONSUMER_SECRET
+
 To get a secret token and consumer key, run through the gamut of creating a new
 application [here](https://apps.twitter.com/).
