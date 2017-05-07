@@ -39,9 +39,15 @@ func init() {
 	}
 
 	if tweetID == 0 || consumerKey == "" || consumerSecret == "" {
-		fmt.Fprintf(os.Stderr, "Error: tweetID, consumerKey and secretToken need to be defined.\n")
-		flag.Usage()
-		os.Exit(1)
+
+		consumerKey = os.Getenv("TWDUMP_CONSUMER_KEY")
+		consumerSecret = os.Getenv("TWDUMP_CONSUMER_SECRET")
+
+		if tweetID == 0 || consumerKey == "" || consumerSecret == "" {
+			fmt.Fprintf(os.Stderr, "Error: tweetID, consumerKey and secretToken need to be defined.\n")
+			flag.Usage()
+			os.Exit(1)
+		}
 	}
 
 	fmt.Println(VERSION)
@@ -50,7 +56,7 @@ func init() {
 func dumpTweet(id int64, api *anaconda.TwitterApi) {
 	v := url.Values{}
 	v.Set("tweet_mode", "extended")
-	fmt.Printf("---- TWEET 🆔: %v ----\n", tweetID)
+	fmt.Printf("---- TWEET ID: %v ----\n", tweetID)
 	tweet, err := api.GetTweet(id, v)
 
 	if err != nil {
@@ -58,12 +64,14 @@ func dumpTweet(id int64, api *anaconda.TwitterApi) {
 	}
 
 	spew.Dump(tweet)
-	fmt.Printf("---- TWEET 🆔: %v ----\n", tweetID)
+	fmt.Printf("---- TWEET ID: %v ----\n", tweetID)
 }
 
 func main() {
+
 	anaconda.SetConsumerKey(consumerKey)
 	anaconda.SetConsumerSecret(consumerSecret)
+
 	api := anaconda.NewTwitterApi("", "")
 
 	dumpTweet(tweetID, api)
