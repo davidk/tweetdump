@@ -14,12 +14,10 @@ const (
 )
 
 var (
-
 	tweetID        int64
 	consumerKey    string
 	consumerSecret string
 	version        bool
-
 )
 
 func init() {
@@ -64,11 +62,9 @@ func dumpTweet(id int64, api *anaconda.TwitterApi) {
 }
 
 func main() {
-
 	anaconda.SetConsumerKey(consumerKey)
 	anaconda.SetConsumerSecret(consumerSecret)
 	api := anaconda.NewTwitterApi("", "")
 
 	dumpTweet(tweetID, api)
-
 }
