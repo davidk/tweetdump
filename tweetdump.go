@@ -38,33 +38,42 @@ func init() {
 		os.Exit(0)
 	}
 
-	if tweetID == 0 || consumerKey == "" || consumerSecret == "" {
+	if tweetID == 0 {
+		fmt.Fprintf(os.Stderr, "Error: tweetid must not be zero (usually values above 20 are valid)\n")
+		flag.Usage()
+		os.Exit(1)
+	}
 
+	if consumerKey == "" {
 		consumerKey = os.Getenv("TWDUMP_CONSUMER_KEY")
-		consumerSecret = os.Getenv("TWDUMP_CONSUMER_SECRET")
+	}
 
-		if tweetID == 0 || consumerKey == "" || consumerSecret == "" {
-			fmt.Fprintf(os.Stderr, "Error: tweetID, consumerKey and secretToken need to be defined.\n")
-			flag.Usage()
-			os.Exit(1)
-		}
+	if consumerSecret == "" {
+		consumerSecret = os.Getenv("TWDUMP_CONSUMER_SECRET")
+	}
+
+	if consumerKey == "" || consumerSecret == "" {
+		fmt.Fprintf(os.Stderr, "Error: key and secret need to be defined.\n")
+		flag.Usage()
+		os.Exit(1)
 	}
 
 	fmt.Println(VERSION)
 }
 
-func dumpTweet(id int64, api *anaconda.TwitterApi) {
+func dumpTweet(id int64, api *anaconda.TwitterApi) error {
 	v := url.Values{}
 	v.Set("tweet_mode", "extended")
 	fmt.Printf("---- TWEET ID: %v ----\n", tweetID)
 	tweet, err := api.GetTweet(id, v)
 
 	if err != nil {
-		fmt.Errorf("Could not get tweet: %v", err)
+		return fmt.Errorf("Could not get tweet: %s\n", err)
 	}
 
 	spew.Dump(tweet)
 	fmt.Printf("---- TWEET ID: %v ----\n", tweetID)
+	return nil
 }
 
 func main() {
@@ -74,5 +83,9 @@ func main() {
 
 	api := anaconda.NewTwitterApi("", "")
 
-	dumpTweet(tweetID, api)
+	err := dumpTweet(tweetID, api)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
