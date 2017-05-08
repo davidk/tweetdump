@@ -1,3 +1,6 @@
+// tweetdump unpacks Anaconda's Tweet structures using the spew pretty printer. 
+// Use this tool to debug data from Twitter, or to see all the data that can be 
+// had when using Anaconda.
 package main
 
 import (
@@ -68,7 +71,7 @@ func dumpTweet(id int64, api *anaconda.TwitterApi) error {
 	tweet, err := api.GetTweet(id, v)
 
 	if err != nil {
-		return fmt.Errorf("Could not get tweet: %s\n", err)
+		return fmt.Errorf("could not get tweet: %s", err)
 	}
 
 	spew.Dump(tweet)
