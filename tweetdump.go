@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	VERSION = "tweetdump version: 0.01\n"
+	VERSION = "tweetdump version: 0.01-ExtendedTweet\n"
 )
 
 var (
